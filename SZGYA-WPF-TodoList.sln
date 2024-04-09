@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34616.47
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SZGYA-WPF-TodoList", "SZGYA-WPF-TodoList\SZGYA-WPF-TodoList.csproj", "{CEFA7995-9F61-4A41-9CA8-E070A183AE21}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEFA7995-9F61-4A41-9CA8-E070A183AE21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEFA7995-9F61-4A41-9CA8-E070A183AE21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEFA7995-9F61-4A41-9CA8-E070A183AE21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEFA7995-9F61-4A41-9CA8-E070A183AE21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {42FB2D2E-9B8F-4A9D-B521-B85CF9571877}
+	EndGlobalSection
+EndGlobal
