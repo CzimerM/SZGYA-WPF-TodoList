@@ -17,19 +17,33 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel HorizontalAlignment="Stretch">
-                        <Label DockPanel.Dock="Left" Content="{Binding Title}"/>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                            <Label  Content="{Binding Title}"/>
+                            <TextBox Width="150px" Visibility="Collapsed"></TextBox>
+                            <Button Click="btnCommandHandler" Visibility="Collapsed">Kész</Button>
+                        </StackPanel>
+                        
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
-                            <Button>↑</Button>
-                            <Button>↓</Button>
-                            <Button>X</Button>
-                            <Button>✓</Button>
+                            <Button Click="btnCommandHandler">Módosítás</Button>
+                            <Button Width="25px" Click="btnCommandHandler">↑</Button>
+                            <Button Width="25px" Click="btnCommandHandler">↓</Button>
+                            <Button Width="25px" Click="btnCommandHandler">✓</Button>
                         </StackPanel>
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBoxItem>
+                <DockPanel HorizontalAlignment="Stretch">
+                    <Label DockPanel.Dock="Left" Content="Feladat hozzáadása..."/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                        <TextBox x:Name="txbTask" Width="180px" Margin="10,0"/>
+                        <Button Width="25px" Click="btnAddTask">✓</Button>
+                    </StackPanel>
+                </DockPanel>
+            </ListBoxItem>
         </ListBox>
-        <StackPanel VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <Button Content="asd"/>
+        <StackPanel VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="10,30">
+            <Button Content="Tesztadatok törlése" Click="btnDeleteTestData"/>
         </StackPanel>
     </DockPanel>
 </Window>
