@@ -1,4 +1,4 @@
-﻿<Window x:Class="SZGYA_WPF_TodoList.MainWindow"
+﻿<Window x:Class="SZGYA_WPF_TodoList.TodoListWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -24,6 +24,7 @@
                         </StackPanel>
                         
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                            <Button Click="btnCommandHandler">Másolás</Button>
                             <Button Click="btnCommandHandler">Módosítás</Button>
                             <Button Width="25px" Click="btnCommandHandler">↑</Button>
                             <Button Width="25px" Click="btnCommandHandler">↓</Button>
@@ -32,7 +33,7 @@
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-            <ListBoxItem>
+            <ListBoxItem Focusable="False">
                 <DockPanel HorizontalAlignment="Stretch">
                     <Label DockPanel.Dock="Left" Content="Feladat hozzáadása..."/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
@@ -44,6 +45,7 @@
         </ListBox>
         <StackPanel VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="10,30">
             <Button Content="Tesztadatok törlése" Click="btnDeleteTestData"/>
+            <Button Content="Új lista" Click="btnNewList"/>
         </StackPanel>
     </DockPanel>
 </Window>

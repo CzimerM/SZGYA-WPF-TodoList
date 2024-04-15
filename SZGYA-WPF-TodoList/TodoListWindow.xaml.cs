@@ -18,14 +18,21 @@ namespace SZGYA_WPF_TodoList
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class TodoListWindow : Window
     {
-        public MainWindow()
+        static List<TodoListWindow> openWindowList = new List<TodoListWindow>();
+
+        public TodoListWindow()
         {
+            openWindowList.Add(this);
             InitializeComponent();
-            TodoItem.wInstance = this;
-            lstTodoBox.Items.Add(new TodoItem() { Title = "test", tesztadat = true });
-            lstTodoBox.Items.Add(new TodoItem() { Title = "test2", tesztadat = true });
+            lstTodoBox.Items.Add(new TodoItem() { Title = "test", tesztadat = true, wInstance = this });
+            lstTodoBox.Items.Add(new TodoItem() { Title = "test2", tesztadat = true, wInstance = this });
+        }
+
+        ~TodoListWindow()
+        {
+            openWindowList.Remove(this);
         }
 
         private void btnCommandHandler(object sender, RoutedEventArgs e)
@@ -45,13 +52,22 @@ namespace SZGYA_WPF_TodoList
 
         private void btnDeleteTestData(object sender, RoutedEventArgs e)
         {
-            foreach (ListBoxItem item in lstTodoBox.Items)
+            for (int i = lstTodoBox.Items.Count - 1; i >= 0; i--)
             {
-                //if (((TodoItem)(item.DataContext)).tesztadat) lstTodoBox.Items.Remove(item);
+                if (lstTodoBox.Items[i] is TodoItem tItem && tItem.tesztadat == true)
+                {
+                    lstTodoBox.Items.Remove(tItem);
+                }
             }
         }
-    }
 
+        private void btnNewList(object sender, RoutedEventArgs e)
+        {
+            TodoListWindow window2 = new TodoListWindow();
+            window2.Show();
+        }
+
+    }
 
     public class TodoItem
     {
@@ -64,7 +80,7 @@ namespace SZGYA_WPF_TodoList
             list[indexB] = tmp;
         }
 
-        public static MainWindow wInstance;
+        public TodoListWindow wInstance;
 
         public string Title { get; set; }
         public void btnHandler(Button btn)
@@ -72,6 +88,8 @@ namespace SZGYA_WPF_TodoList
             int itemIndex = wInstance.lstTodoBox.Items.IndexOf(this);
             switch (btn.Content.ToString())
             {
+                case "Másolás":
+                    break;
                 case "Kész":
                     this.Title = ((TextBox)((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1]).Text;
                     ((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1].Visibility = Visibility.Collapsed;
