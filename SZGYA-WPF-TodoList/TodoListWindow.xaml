@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SZGYA_WPF_TodoList"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Closed="wndClosed">
     <DockPanel>
         <Label DockPanel.Dock="Top" VerticalAlignment="Center" HorizontalAlignment="Center">TODO List</Label>
         <ListBox x:Name="lstTodoBox" DockPanel.Dock="Top" Height="auto" VerticalAlignment="Stretch">
@@ -19,7 +20,7 @@
                     <DockPanel HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                             <Label  Content="{Binding Title}"/>
-                            <TextBox Width="150px" Visibility="Collapsed"></TextBox>
+                            <TextBox Width="150px" Visibility="Collapsed" GotFocus="TextBox_GotFocus"></TextBox>
                             <Button Click="btnCommandHandler" Visibility="Collapsed">Kész</Button>
                         </StackPanel>
                         
@@ -46,6 +47,8 @@
         <StackPanel VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="10,30">
             <Button Content="Tesztadatok törlése" Click="btnDeleteTestData"/>
             <Button Content="Új lista" Click="btnNewList"/>
+            <Button x:Name="btnOrderAZ" Content="Sorbarendezés (A-Z)" Click="btnOrder"/>
+            <Button x:Name="btnOrderZA" Content="Sorbarendezés (Z-A)" Click="btnOrder"/>
         </StackPanel>
     </DockPanel>
 </Window>

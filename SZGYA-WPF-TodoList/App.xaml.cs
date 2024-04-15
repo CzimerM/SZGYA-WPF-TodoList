@@ -10,5 +10,4 @@ namespace SZGYA_WPF_TodoList
     public partial class App : Application
     {
     }
-
 }

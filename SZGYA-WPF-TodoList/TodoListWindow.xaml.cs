@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SZGYA_WPF_TodoList.Dialogs;
 
 namespace SZGYA_WPF_TodoList
 {
@@ -20,17 +21,19 @@ namespace SZGYA_WPF_TodoList
     /// </summary>
     public partial class TodoListWindow : Window
     {
-        static List<TodoListWindow> openWindowList = new List<TodoListWindow>();
+        public static List<TodoListWindow> openWindowList = new List<TodoListWindow>();
+        public string Title { get; set; }
 
         public TodoListWindow()
         {
-            openWindowList.Add(this);
             InitializeComponent();
+            lstTodoBox.Items.SortDescriptions.Clear();
             lstTodoBox.Items.Add(new TodoItem() { Title = "test", tesztadat = true, wInstance = this });
             lstTodoBox.Items.Add(new TodoItem() { Title = "test2", tesztadat = true, wInstance = this });
+            Title = $"{openWindowList.Count}";
         }
 
-        ~TodoListWindow()
+        public void wndClosed(object sender, EventArgs e)
         {
             openWindowList.Remove(this);
         }
@@ -47,7 +50,18 @@ namespace SZGYA_WPF_TodoList
 
         private void btnAddTask(object sender, RoutedEventArgs e)
         {
-            lstTodoBox.Items.Add(new TodoItem() { Title = txbTask.Text });
+            foreach (object item in lstTodoBox.Items)
+            {
+                if (item is TodoItem tItem)
+                {
+                    if (tItem.Title == txbTask.Text)
+                    {
+                        MessageBox.Show("Van már ilyen feladat!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
+            }
+            lstTodoBox.Items.Add(new TodoItem() { Title = txbTask.Text, wInstance = this});
         }
 
         private void btnDeleteTestData(object sender, RoutedEventArgs e)
@@ -66,13 +80,39 @@ namespace SZGYA_WPF_TodoList
             TodoListWindow window2 = new TodoListWindow();
             window2.Show();
         }
+        
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            (sender as TextBox).SelectAll();
+        }
+
+        private void btnOrder(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            switch (btn.Name)
+            {
+                case "btnOrderAZ":
+                    lstTodoBox.Items.SortDescriptions.Clear();
+                    lstTodoBox.Items.SortDescriptions.Add(
+                        new System.ComponentModel.SortDescription("Title",
+                            System.ComponentModel.ListSortDirection.Ascending));
+                    break;
+                case "btnOrderZA":
+                    lstTodoBox.Items.SortDescriptions.Clear();
+                    lstTodoBox.Items.SortDescriptions.Add(
+                        new System.ComponentModel.SortDescription("Title",
+                            System.ComponentModel.ListSortDirection.Descending));
+                    break;
+                default:
+                    break;
+            }
+        }
 
     }
 
     public class TodoItem
     {
         public bool tesztadat = false;
-
         public static void Swap(ItemCollection list, int indexA, int indexB)
         {
             object tmp = list[indexA];
@@ -80,6 +120,17 @@ namespace SZGYA_WPF_TodoList
             list[indexB] = tmp;
         }
 
+        public TodoItem()
+        {
+            
+        }
+        public TodoItem(TodoItem old, TodoListWindow newwInstance)
+        {
+            Title = old.Title;
+            tesztadat = old.tesztadat;
+            wInstance = newwInstance;
+        }
+        
         public TodoListWindow wInstance;
 
         public string Title { get; set; }
@@ -89,6 +140,11 @@ namespace SZGYA_WPF_TodoList
             switch (btn.Content.ToString())
             {
                 case "Másolás":
+                    CopyDialogBox box = new CopyDialogBox(TodoListWindow.openWindowList);
+                    if (box.ShowDialog() == true)
+                    {
+                        TodoListWindow.openWindowList[box.Answer].lstTodoBox.Items.Add(new TodoItem(this, TodoListWindow.openWindowList[box.Answer]));
+                    }
                     break;
                 case "Kész":
                     this.Title = ((TextBox)((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1]).Text;
@@ -99,6 +155,10 @@ namespace SZGYA_WPF_TodoList
                 case "Módosítás":
                     ((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1].Visibility = Visibility.Visible;
                     ((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[2].Visibility = Visibility.Visible;
+                    ((TextBox)((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1]).Text =
+                        Title;
+                    ((TextBox)((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1])
+                        .Focus();
                     break;
                 case "↑":
                     if (itemIndex == 0) break;

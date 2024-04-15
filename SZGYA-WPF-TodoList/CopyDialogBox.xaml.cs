@@ -5,11 +5,10 @@ namespace SZGYA_WPF_TodoList.Dialogs
 {
     public partial class CopyDialogBox : Window
     {
-        public CopyDialogBox(string question, string defaultAnswer = "")
+        public CopyDialogBox(List<TodoListWindow> lists)
         {
             InitializeComponent();
-            lblQuestion.Content = question;
-            txtAnswer.Text = defaultAnswer;
+            lstvAnswer.ItemsSource = lists.Select(l => l.Title).ToList();;
         }
 
         private void btnDialogOk_Click(object sender, RoutedEventArgs e)
@@ -19,13 +18,12 @@ namespace SZGYA_WPF_TodoList.Dialogs
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            txtAnswer.SelectAll();
-            txtAnswer.Focus();
+            
         }
 
-        public string Answer
+        public int Answer
         {
-            get { return txtAnswer.Text; }
+            get { return lstvAnswer.SelectedIndex; }
         }
     }
 }
