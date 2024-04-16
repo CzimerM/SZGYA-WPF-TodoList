@@ -8,6 +8,11 @@
         Title="TODO List" Height="450" Width="800"
         Closed="wndClosed"
         WindowStyle="None">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="2,0"/>
+        </Style>
+    </Window.Resources>
     <DockPanel>
         <Label x:Name="lblTitle" DockPanel.Dock="Top" VerticalAlignment="Center" HorizontalAlignment="Center">TODO List</Label>
         <ListBox x:Name="lstTodoBox" DockPanel.Dock="Top" Height="auto" VerticalAlignment="Stretch">
