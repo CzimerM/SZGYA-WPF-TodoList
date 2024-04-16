@@ -24,15 +24,18 @@ namespace SZGYA_WPF_TodoList
         public static List<TodoListWindow> openWindowList = new List<TodoListWindow>();
         public string Title { get; set; }
 
-        public int AmountDone { get; set; } = 0;
+        public int OpAmount { get; set; } = 0;
 
         public TodoListWindow()
         {
             InitializeComponent();
             openWindowList.Add(this);
             lstTodoBox.Items.SortDescriptions.Clear();
-            lstTodoBox.Items.Add(new TodoItem() { Title = "test", tesztadat = true, wInstance = this });
-            lstTodoBox.Items.Add(new TodoItem() { Title = "test2", tesztadat = true, wInstance = this });
+            if (openWindowList.Count == 1)
+            {
+                lstTodoBox.Items.Add(new TodoItem() { Title = "test", tesztadat = true, wInstance = this });
+                lstTodoBox.Items.Add(new TodoItem() { Title = "test2", tesztadat = true, wInstance = this });
+            }
             Title = $"TODO List - {openWindowList.Count}.";
             lblTitle.Content = Title;
 
@@ -77,6 +80,7 @@ namespace SZGYA_WPF_TodoList
             }
             lstTodoBox.Items.Add(new TodoItem() { Title = txbTask.Text, wInstance = this});
             txbTask.Text = string.Empty;
+            updateOpAmount();
         }
 
         private void btnDeleteTestData(object sender, RoutedEventArgs e)
@@ -132,8 +136,14 @@ namespace SZGYA_WPF_TodoList
 
         private void btnExit(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"Elvégzett feladatok száma: {this.AmountDone}", "Kilépés", MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show($"Elvégzett feladatok száma: {this.AmountDone}", "Kilépés", MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
+        }
+
+        public void updateOpAmount()
+        {
+            OpAmount++;
+            lblOpCount.Content = $"Elvégzett műveletek: {OpAmount}";
         }
     }
 
@@ -172,12 +182,14 @@ namespace SZGYA_WPF_TodoList
                     {
                         TodoListWindow.openWindowList[box.Answer].lstTodoBox.Items.Add(new TodoItem(this, TodoListWindow.openWindowList[box.Answer]));
                     }
+                    wInstance.updateOpAmount();
                     break;
                 case "Kész":
                     this.Title = ((TextBox)((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1]).Text;
                     ((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1].Visibility = Visibility.Collapsed;
                     ((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[2].Visibility = Visibility.Collapsed;
                     wInstance.lstTodoBox.Items.Refresh();
+                    wInstance.updateOpAmount();
                     break;
                 case "Módosítás":
                     ((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1].Visibility = Visibility.Visible;
@@ -197,7 +209,7 @@ namespace SZGYA_WPF_TodoList
                     break;
                 case "✓":
                     wInstance.lstTodoBox.Items.Remove(this);
-                    wInstance.AmountDone++;
+                    wInstance.updateOpAmount();
                     break;
                 default:
                     break;

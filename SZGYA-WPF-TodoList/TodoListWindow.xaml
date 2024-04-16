@@ -56,6 +56,7 @@
             <Button x:Name="btnOrderAZ" Content="Sorbarendezés (A-Z)" Click="btnOrder"/>
             <Button x:Name="btnOrderZA" Content="Sorbarendezés (Z-A)" Click="btnOrder"/>
             <Button Click="btnExit" Content="Kilépés"/>
+            <Label x:Name="lblOpCount">Elvégzett műveletek: 0</Label>
         </StackPanel>
     </DockPanel>
 </Window>
