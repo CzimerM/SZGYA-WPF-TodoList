@@ -24,18 +24,32 @@ namespace SZGYA_WPF_TodoList
         public static List<TodoListWindow> openWindowList = new List<TodoListWindow>();
         public string Title { get; set; }
 
+        public int AmountDone { get; set; } = 0;
+
         public TodoListWindow()
         {
             InitializeComponent();
+            openWindowList.Add(this);
             lstTodoBox.Items.SortDescriptions.Clear();
             lstTodoBox.Items.Add(new TodoItem() { Title = "test", tesztadat = true, wInstance = this });
             lstTodoBox.Items.Add(new TodoItem() { Title = "test2", tesztadat = true, wInstance = this });
-            Title = $"{openWindowList.Count}";
+            Title = $"TODO List - {openWindowList.Count}.";
+            lblTitle.Content = Title;
+
+            this.KeyDown += new KeyEventHandler(wnd_KeyDown);
         }
 
         public void wndClosed(object sender, EventArgs e)
         {
             openWindowList.Remove(this);
+        }
+
+        void wnd_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.System && e.SystemKey == Key.F4)
+            {
+                e.Handled = true;
+            }
         }
 
         private void btnCommandHandler(object sender, RoutedEventArgs e)
@@ -62,6 +76,7 @@ namespace SZGYA_WPF_TodoList
                 }
             }
             lstTodoBox.Items.Add(new TodoItem() { Title = txbTask.Text, wInstance = this});
+            txbTask.Text = string.Empty;
         }
 
         private void btnDeleteTestData(object sender, RoutedEventArgs e)
@@ -73,6 +88,7 @@ namespace SZGYA_WPF_TodoList
                     lstTodoBox.Items.Remove(tItem);
                 }
             }
+            ((Button)sender).IsEnabled = false;
         }
 
         private void btnNewList(object sender, RoutedEventArgs e)
@@ -107,7 +123,18 @@ namespace SZGYA_WPF_TodoList
                     break;
             }
         }
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            // Begin dragging the window
+            this.DragMove();
+        }
 
+        private void btnExit(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show($"Elvégzett feladatok száma: {this.AmountDone}", "Kilépés", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.Close();
+        }
     }
 
     public class TodoItem
@@ -170,6 +197,7 @@ namespace SZGYA_WPF_TodoList
                     break;
                 case "✓":
                     wInstance.lstTodoBox.Items.Remove(this);
+                    wInstance.AmountDone++;
                     break;
                 default:
                     break;
