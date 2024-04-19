@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SZGYA_WPF_TodoList.Dialogs;
+using static SZGYA_WPF_TodoList.MainWindow;
 
 namespace SZGYA_WPF_TodoList
 {
@@ -26,6 +27,10 @@ namespace SZGYA_WPF_TodoList
 
         public int OpAmount { get; set; } = 0;
 
+        public static MainWindow mainWInstance;
+
+        private bool testDataDeleted = true;
+
         public TodoListWindow()
         {
             InitializeComponent();
@@ -35,6 +40,7 @@ namespace SZGYA_WPF_TodoList
             {
                 lstTodoBox.Items.Add(new TodoItem() { Title = "test", tesztadat = true, wInstance = this });
                 lstTodoBox.Items.Add(new TodoItem() { Title = "test2", tesztadat = true, wInstance = this });
+                testDataDeleted = false;
             }
             Title = $"TODO List - {openWindowList.Count}.";
             lblTitle.Content = Title;
@@ -44,6 +50,7 @@ namespace SZGYA_WPF_TodoList
 
         public void wndClosed(object sender, EventArgs e)
         {
+            mainWInstance.handleListDelete(this);
             openWindowList.Remove(this);
         }
 
@@ -67,6 +74,8 @@ namespace SZGYA_WPF_TodoList
 
         private void btnAddTask(object sender, RoutedEventArgs e)
         {
+            deleteTestData();
+            btnDeleteTestData.IsEnabled = false;
             foreach (object item in lstTodoBox.Items)
             {
                 if (item is TodoItem tItem)
@@ -83,15 +92,25 @@ namespace SZGYA_WPF_TodoList
             updateOpAmount();
         }
 
-        private void btnDeleteTestData(object sender, RoutedEventArgs e)
+        private void deleteTestData()
         {
-            for (int i = lstTodoBox.Items.Count - 1; i >= 0; i--)
+            if (!testDataDeleted)
             {
-                if (lstTodoBox.Items[i] is TodoItem tItem && tItem.tesztadat == true)
+                for (int i = lstTodoBox.Items.Count - 1; i >= 0; i--)
                 {
-                    lstTodoBox.Items.Remove(tItem);
+                    if (lstTodoBox.Items[i] is TodoItem tItem && tItem.tesztadat == true)
+                    {
+                        lstTodoBox.Items.Remove(tItem);
+                    }
                 }
+                testDataDeleted = true;
+                updateOpAmount();
             }
+        }
+
+        private void btnDeleteTestDataClick(object sender, RoutedEventArgs e)
+        {
+            deleteTestData();
             ((Button)sender).IsEnabled = false;
         }
 
@@ -99,6 +118,8 @@ namespace SZGYA_WPF_TodoList
         {
             TodoListWindow window2 = new TodoListWindow();
             window2.Show();
+            window2.btnDeleteTestData.IsEnabled = false;
+            mainWInstance.lstbxTodoLists.Items.Add(new TodoList() { wInstance = window2 });
         }
         
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -109,16 +130,15 @@ namespace SZGYA_WPF_TodoList
         private void btnOrder(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
+            lstTodoBox.Items.SortDescriptions.Clear();
             switch (btn.Name)
             {
                 case "btnOrderAZ":
-                    lstTodoBox.Items.SortDescriptions.Clear();
                     lstTodoBox.Items.SortDescriptions.Add(
                         new System.ComponentModel.SortDescription("Title",
                             System.ComponentModel.ListSortDirection.Ascending));
                     break;
                 case "btnOrderZA":
-                    lstTodoBox.Items.SortDescriptions.Clear();
                     lstTodoBox.Items.SortDescriptions.Add(
                         new System.ComponentModel.SortDescription("Title",
                             System.ComponentModel.ListSortDirection.Descending));
@@ -136,7 +156,6 @@ namespace SZGYA_WPF_TodoList
 
         private void btnExit(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show($"Elvégzett feladatok száma: {this.AmountDone}", "Kilépés", MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
         }
 

@@ -51,7 +51,7 @@
             </ListBoxItem>
         </ListBox>
         <StackPanel VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="10,30">
-            <Button Content="Tesztadatok törlése" Click="btnDeleteTestData"/>
+            <Button x:Name="btnDeleteTestData" Content="Tesztadatok törlése" Click="btnDeleteTestDataClick"/>
             <Button Content="Új lista" Click="btnNewList"/>
             <Button x:Name="btnOrderAZ" Content="Sorbarendezés (A-Z)" Click="btnOrder"/>
             <Button x:Name="btnOrderZA" Content="Sorbarendezés (Z-A)" Click="btnOrder"/>

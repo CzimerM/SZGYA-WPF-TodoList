@@ -22,6 +22,7 @@ namespace SZGYA_WPF_TodoList
     {
         public MainWindow()
         {
+            TodoListWindow.mainWInstance = this;
             InitializeComponent();
         }
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -33,7 +34,28 @@ namespace SZGYA_WPF_TodoList
 
         private void btnExit(object sender, RoutedEventArgs e)
         {
+            int amountDone = 0;
+            for (int i = lstbxTodoLists.Items.Count - 1; i >= 0; i--)
+            {
+                if (lstbxTodoLists.Items[i] is TodoList tItem)
+                {
+                    amountDone += tItem.wInstance.OpAmount;
+                    tItem.wInstance.Close();
+                }
+            }
+            MessageBox.Show($"Elvégzett műveletek száma: {amountDone}", "Kilépés", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
+        }
+
+        public void handleListDelete(TodoListWindow item)
+        {
+            for (int i = lstbxTodoLists.Items.Count - 1; i >= 0; i--)
+            {
+                if (((TodoList)lstbxTodoLists.Items[i]).wInstance == item) 
+                {
+                    lstbxTodoLists.Items.RemoveAt(i);
+                }
+            }
         }
 
         private void btnNewTodo(object sender, RoutedEventArgs e)
@@ -44,7 +66,7 @@ namespace SZGYA_WPF_TodoList
         }
 
 
-        class TodoList
+        public class TodoList
         {
             public TodoListWindow wInstance;
             public string Title { get
@@ -55,6 +77,8 @@ namespace SZGYA_WPF_TodoList
             }
 
             public ItemCollection Items { get { return wInstance.lstTodoBox.Items; } }
+
+            public override string ToString() => Title;
         }
     }
 }
