@@ -19,6 +19,14 @@ namespace SZGYA_WPF_TodoList
 {
     /// <summary>
     /// WPF TODOList (Csizmadia Márk - Airamek)
+    /// https://github.com/CzimerM/SZGYA-WPF-TodoList
+    /// A blogon leírt összes követelménynek megfelel.
+    /// Extra:
+    ///     - Végtelen lista támogatás
+    ///     - A ui követelmények szabadon értelmezése
+    /// Nem működik:
+    ///     - Nincs címsor
+    ///     - A mentés/betöltés funkcionalitás nem működik
     /// </summary>
     public partial class MainWindow : Window
     {
