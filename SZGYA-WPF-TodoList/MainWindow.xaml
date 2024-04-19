@@ -29,6 +29,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                            <Button Click="btnCommandHandler">Mentés</Button>
                             <Button Click="btnCommandHandler">Módosítás</Button>
                             <Button Width="25px" Click="btnCommandHandler">↑</Button>
                             <Button Width="25px" Click="btnCommandHandler">↓</Button>
@@ -48,6 +49,7 @@
             </ListBoxItem>
         </ListBox>
         <StackPanel Orientation="Horizontal" Margin="0,10">
+            <Button x:Name="saveTestClick" Click="saveTestClick_Click">Mentés teszt</Button>
             <Button Content="Kilépés" Click="btnExit"/>
         </StackPanel>
     </StackPanel>

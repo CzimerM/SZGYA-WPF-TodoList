@@ -13,11 +13,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SZGYA_WPF_TodoList.Dialogs;
+using Newtonsoft.Json;
 
 namespace SZGYA_WPF_TodoList
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// WPF TODOList (Csizmadia Márk - Airamek)
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -85,6 +86,12 @@ namespace SZGYA_WPF_TodoList
         }
 
 
+        public struct SimpleTodoItem
+        {
+            public string Title;
+            public bool tesztadat;
+        }
+
         public class TodoList
         {
             public static void Swap(ItemCollection list, int indexA, int indexB)
@@ -94,7 +101,7 @@ namespace SZGYA_WPF_TodoList
                 list[indexB] = tmp;
             }
 
-            public TodoListWindow wInstance;
+            [JsonIgnore] public TodoListWindow wInstance;
             public string Title {
                 get
                 {
@@ -103,7 +110,17 @@ namespace SZGYA_WPF_TodoList
                 set { wInstance.Title = value; }
             }
 
-            public ItemCollection Items { get { return wInstance.lstTodoBox.Items; } }
+            public List<SimpleTodoItem> Items { 
+                get 
+                { 
+                    List<SimpleTodoItem> res = new List<SimpleTodoItem>();
+                    foreach(var item in wInstance.lstTodoBox.Items)
+                    {
+                        if (item is TodoItem tItem) res.Add(new SimpleTodoItem() { Title = tItem.Title, tesztadat = tItem.tesztadat});
+                    }
+                    return res; 
+                } 
+            }
 
             public override string ToString() => Title;
 
@@ -112,6 +129,8 @@ namespace SZGYA_WPF_TodoList
                 int itemIndex = MainWindow.instance.lstbxTodoLists.Items.IndexOf(this);
                 switch (btn.Content.ToString())
                 {
+                    case "Mentés":
+                        break;
                     case "Kész":
                         this.Title = ((TextBox)((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1]).Text;
                         ((StackPanel)((DockPanel)((StackPanel)btn.Parent).Parent).Children[0]).Children[1].Visibility = Visibility.Collapsed;
@@ -142,6 +161,18 @@ namespace SZGYA_WPF_TodoList
                         break;
                 }
             }
+        }
+
+        private void saveTestClick_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in MainWindow.instance.lstbxTodoLists.Items)
+            {
+                if (item is TodoList tItem)
+                {
+                    MessageBox.Show(JsonConvert.SerializeObject(tItem));
+                }
+            }
+            
         }
     }
 }
