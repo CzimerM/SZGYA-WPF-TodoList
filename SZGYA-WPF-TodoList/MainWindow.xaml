@@ -13,9 +13,41 @@
         </Style>
     </Window.Resources>
     <StackPanel Margin="10,10">
-        <ListBox MinHeight="50px" x:Name="lstbxTodoLists"></ListBox>
+        <ListBox x:Name="lstbxTodoLists">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                            <Label  Content="{Binding Title}"/>
+                            <TextBox Width="150px" Visibility="Collapsed" GotFocus="TextBox_GotFocus"></TextBox>
+                            <Button Click="btnCommandHandler" Visibility="Collapsed">Kész</Button>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                            <Button Click="btnCommandHandler">Módosítás</Button>
+                            <Button Width="25px" Click="btnCommandHandler">↑</Button>
+                            <Button Width="25px" Click="btnCommandHandler">↓</Button>
+                            <Button Width="50px" Click="btnCommandHandler">Törlés</Button>
+                        </StackPanel>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBoxItem Focusable="False">
+                <DockPanel HorizontalAlignment="Stretch">
+                    <Label DockPanel.Dock="Left" Content="Új lista..."/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                        <TextBox x:Name="txbTask" Width="180px" Margin="10,0"/>
+                        <Button Width="25px" Click="btnNewTodo">✓</Button>
+                    </StackPanel>
+                </DockPanel>
+            </ListBoxItem>
+        </ListBox>
         <StackPanel Orientation="Horizontal" Margin="0,10">
-            <Button Content="Új lista" Click="btnNewTodo"/>
             <Button Content="Kilépés" Click="btnExit"/>
         </StackPanel>
     </StackPanel>

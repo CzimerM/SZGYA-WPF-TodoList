@@ -22,16 +22,27 @@ namespace SZGYA_WPF_TodoList
     /// </summary>
     public partial class TodoListWindow : Window
     {
+
         public static List<TodoListWindow> openWindowList = new List<TodoListWindow>();
-        public string Title { get; set; }
+        public string Title { get
+            {
+                return title;
+            }
+            set
+            {
+                title = value;
+                lblTitle.Content = title;
+            }
+        }
 
         public int OpAmount { get; set; } = 0;
 
         public static MainWindow mainWInstance;
 
         private bool testDataDeleted = true;
+        private string title;
 
-        public TodoListWindow()
+        public TodoListWindow(string wTitle = "")
         {
             InitializeComponent();
             openWindowList.Add(this);
@@ -42,7 +53,8 @@ namespace SZGYA_WPF_TodoList
                 lstTodoBox.Items.Add(new TodoItem() { Title = "test2", tesztadat = true, wInstance = this });
                 testDataDeleted = false;
             }
-            Title = $"TODO List - {openWindowList.Count}.";
+            if (wTitle == "") Title = $"TODO List - {openWindowList.Count}.";
+            else Title = wTitle;
             lblTitle.Content = Title;
 
             this.KeyDown += new KeyEventHandler(wnd_KeyDown);
